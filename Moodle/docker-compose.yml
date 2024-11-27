@@ -1,5 +1,4 @@
-version: '3.8'
-
+#version: '3.8'
 services:
   moodle:
     image: bitnami/moodle:latest
@@ -13,11 +12,10 @@ services:
       - MOODLE_DATABASE_USER=moodle
       - MOODLE_DATABASE_PASSWORD=password
     volumes:
-      - moodle_data:/bitnami/moodle
+      - ./moodle:/bitnami/moodle
     depends_on:
       - db
     restart: always
-
   db:
     image: mariadb:latest
     container_name: moodle_db
