@@ -1,33 +1,36 @@
 #version: '3.8'
+version: '3.8'
+
 services:
-  moodle:
-    image: bitnami/moodle:latest
-    container_name: moodle
-    ports:
-      - "8082:80" # Moodle estará disponible en http://localhost:8082
-    environment:
-      - MOODLE_DATABASE_HOST=db
-      - MOODLE_DATABASE_PORT=3306
-      - MOODLE_DATABASE_NAME=moodle
-      - MOODLE_DATABASE_USER=moodle
-      - MOODLE_DATABASE_PASSWORD=password
-    volumes:
-      - ./moodle:/bitnami/moodle
-    depends_on:
-      - db
-    restart: always
-  db:
+  moodle_db:
     image: mariadb:latest
     container_name: moodle_db
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=rootpassword
       - MYSQL_DATABASE=moodle
-      - MYSQL_USER=moodle
-      - MYSQL_PASSWORD=password
+      - MYSQL_USER=moodleuser
+      - MYSQL_PASSWORD=moodlepassword
     volumes:
       - db_data:/var/lib/mysql
+
+  moodle:
+    image: bitnami/moodle:latest
+    container_name: moodle
     restart: always
+    ports:
+      - "8084:84" # Cambia si necesitas otro puerto
+    environment:
+      - MOODLE_DATABASE_TYPE=mariadb
+      - MOODLE_DATABASE_HOST=moodle_db
+      - MOODLE_DATABASE_NAME=moodle
+      - MOODLE_DATABASE_USER=moodleuser
+      - MOODLE_DATABASE_PASSWORD=moodlepassword
+    volumes:
+      - moodle_data:/bitnami/moodle
+    depends_on:
+      - moodle_db
 
 volumes:
-  moodle_data:
   db_data:
+  moodle_data:
