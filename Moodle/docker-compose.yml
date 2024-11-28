@@ -19,7 +19,7 @@ services:
     container_name: moodle
     restart: always
     ports:
-      - "8084:84" # Cambia si necesitas otro puerto
+      - "8082:82" # Cambia si necesitas otro puerto
     environment:
       - MOODLE_DATABASE_TYPE=mariadb
       - MOODLE_DATABASE_HOST=moodle_db
